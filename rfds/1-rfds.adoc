@@ -1,0 +1,30 @@
+
+:authors: Max Newcomer <@maxwnewcomer>
+:state: ideation
+:discussion: todo
+:labels: rfd, oss-core
+
+= Requests for Discussion (RFD) =
+
+This project's *Requests for Discussions* will follow the format specified in https://rfd.shared.oxide.computer/rfd/0001[Oxide RFD-1], with the following modifications:
+
+== Modifications to Oxide RFD Structure ==
+
+1. **GitHub Usernames Instead of Emails**  
+   Authors will be identified by their GitHub usernames rather than email addresses.  
+   This avoids complications for contributors using no-reply email addresses.
+
+2. **No Script for RFD Generation**  
+   There is no predefined script for generating RFDs. Authors will create RFDs manually.
+
+3. **Branch Naming Convention for Initial RFDs**  
+   Branch names for new RFDs will use the `rfd/<number>` format.  
+   For example, this RFD's branch is named `rfd/1`.
+
+4. **Modifications to Existing RFDs**  
+   Modifications will follow a branch naming convention of `rfd/<number>: <summary_in_present_tense>`.  
+   This is similar to semantic commit messages.
+   For example, `rfd/1: add modification branch semantics`
+
+5. **File Naming Convention for RFDs**
+   RFDs will be published in the `/rfds` directory with a filename of `<number>-<title>.adoc`
