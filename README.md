@@ -21,7 +21,7 @@ While there are many reasons to complicate this setup (some of them not that goo
 
 ## Project Concepts
 
-1. **RFDs** - RFD stands for "Request for Discussion". Pioneered by [Oxide](https://oxide.computer/), I think a RFD decision making structure for this project would be very fitting. For this project, rfds are stored at the in the /rfds folder, numbered by order of RFD + fittingly named. Check out RFD `1-rfds.md` for more detail on what these documents are, when to use them, and how to use them.
+1. **RFDs** - RFD stands for "Request for Discussion". Pioneered by [Oxide](https://oxide.computer/), I think a RFD decision making structure for this project would be very fitting. For this project, rfds are stored at the in the /rfds folder, numbered by order of RFD + fittingly named. Check out RFD `1-rfds.adoc` for more detail on what these documents are, when to use them, and how to use them.
 
 ---
 
