@@ -5,12 +5,7 @@ use indicatif::{MultiProgress, ProgressBar, ProgressStyle};
 
 pub fn run_setup() {
     // Define tools to install
-    let tools = vec![
-        ("KIND", "kind"),
-        ("kubectl", "kubectl"),
-        ("Helm", "helm"),
-        ("Minikube", "minikube"),
-    ];
+    let tools = vec![("KIND", "kind"), ("kubectl", "kubectl"), ("Helm", "helm")];
 
     let m = MultiProgress::new();
     let sty = ProgressStyle::with_template("{prefix:.bold.dim} {spinner} {wide_msg}")
