@@ -11,7 +11,6 @@ pub fn install_tool(pb: ProgressBar, tool_name: &str, brew_package: &str) {
     pb.set_message(format!("Installing {}", tool_name));
     pb.enable_steady_tick(Duration::from_millis(50));
 
-    // Simulating installation time or calling a real command
     let status = Command::new("brew")
         .arg("install")
         .arg(brew_package)

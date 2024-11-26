@@ -4,7 +4,7 @@ use crate::cmds::utils;
 use indicatif::{MultiProgress, ProgressBar, ProgressStyle};
 
 pub fn run_setup() {
-    // Define tools to install
+    // Tools to install
     let tools = vec![("KIND", "kind"), ("kubectl", "kubectl"), ("Helm", "helm")];
 
     let m = MultiProgress::new();
