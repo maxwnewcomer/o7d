@@ -1,53 +1,35 @@
-use indicatif::{ProgressBar, ProgressStyle};
+use indicatif::ProgressBar;
 use std::{
     process::{Command, Stdio},
+    thread,
     time::Duration,
 };
 
-use colored::*;
+use rand::{thread_rng, Rng};
 
-pub fn install_tool(tool_name: &str, brew_package: &str) -> Result<(), String> {
-    let spinner = ProgressBar::new_spinner();
-    spinner.set_style(
-        ProgressStyle::with_template("{spinner:.green} {msg}")
-            .unwrap()
-            .tick_strings(&["-", "\\", "|", "/"]),
-    );
-    spinner.enable_steady_tick(Duration::from_millis(200));
-    spinner.set_message(format!("🔧 Installing {}", tool_name.yellow()));
+pub fn install_tool(pb: ProgressBar, tool_name: &str, brew_package: &str) {
+    pb.set_message(format!("Installing {}", tool_name));
+    pb.enable_steady_tick(Duration::from_millis(50));
 
+    // Simulating installation time or calling a real command
     let status = Command::new("brew")
         .arg("install")
         .arg(brew_package)
-        .stdout(Stdio::null()) // Suppress standard output
-        .stderr(Stdio::null()) // Suppress standard error
+        .stdout(Stdio::null()) // Suppress output
+        .stderr(Stdio::null()) // Suppress output
         .status();
 
-    spinner.finish_and_clear();
+    let mut rng = thread_rng();
 
-    match status {
-        Ok(status) if status.success() => {
-            println!(
-                "{} {}",
-                "✅".green(),
-                format!("{} installed successfully!", tool_name.bold().blue())
-            );
-            Ok(())
+    thread::sleep(rng.gen_range(Duration::from_secs(1)..Duration::from_secs(5)));
+
+    pb.finish_with_message(if let Ok(status) = status {
+        if status.success() {
+            format!("✅ {} installed successfully", tool_name)
+        } else {
+            format!("❌ Failed to install {}", tool_name)
         }
-        Ok(status) => Err(format!(
-            "{} {}",
-            "❌".red(),
-            format!(
-                "Failed to install {} with exit code: {}",
-                tool_name,
-                status.code().unwrap_or(-1)
-            )
-            .red()
-        )),
-        Err(err) => Err(format!(
-            "{} {}",
-            "❌".red(),
-            format!("Error executing brew install {}: {}", brew_package, err).red()
-        )),
-    }
+    } else {
+        format!("❌ Error installing {}", tool_name)
+    });
 }
