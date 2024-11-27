@@ -1,6 +1,6 @@
 
 :authors: Max Newcomer <@maxwnewcomer>
-:state: ideation
+:state: discussion
 :discussion: todo
 :labels: rfd, oss-core
 
@@ -22,9 +22,12 @@ This project's *Requests for Discussions* will follow the format specified in ht
    For example, this RFD's branch is named `rfd/1`.
 
 4. **Modifications to Existing RFDs**  
-   Modifications will follow a branch naming convention of `rfd/<number>: <summary_in_present_tense>`.  
+   Modifications will follow a branch naming convention of `rfd/<number>--<summary-in-present-tense>`.  
    This is similar to semantic commit messages.
-   For example, `rfd/1: add modification branch semantics`
+   For example, `rfd/1--add-modification-branch-semantics`
 
 5. **File Naming Convention for RFDs**
    RFDs will be published in the `/rfds` directory with a filename of `<number>-<title>.adoc`
+
+6. **PR Naming Convention for new RFDs or modified RFDs**
+   RFDs changes/initialization prs will follow the title format of `rfd/<number>: <title | summary of modification>`
