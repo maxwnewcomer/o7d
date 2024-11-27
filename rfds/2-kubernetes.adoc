@@ -1,0 +1,52 @@
+:authors: Max Newcomer <@maxwnewcomer>
+:state: discussion 
+:discussion: todo
+:labels: infrastructure, core
+
+= Kubernetes
+
+The core of o7d.
+
+== Problem Statement
+
+Cloud deployments have become increasingly complex over the years, with organizations often struggling to manage containerized applications at scale. While Kubernetes has emerged as the de facto standard for container orchestration, its flexibility can lead to analysis paralysis and overly complex configurations. o7d needs a solid foundation for container management that enables rather than overwhelms.
+
+== Why Kubernetes?
+
+At its core, o7d requires a battle-tested system for deploying and managing containerized workloads. Kubernetes has proven itself at massive scale across countless organizations. Its declarative approach to infrastructure aligns perfectly with o7d's philosophy - providing the essential building blocks while maintaining a clear path forward.
+
+The widespread adoption of Kubernetes means a deep ecosystem of tools and knowledge that o7d can leverage. Rather than reinventing the wheel, we can focus on crafting an opinionated yet powerful platform that solves real user needs.
+
+== Implementation Strategy 
+
+The o7d Kubernetes implementation will be ruthlessly focused on simplicity, security, and stability. We'll start with a minimal viable Kubernetes distribution that provides just the essential components needed for production workloads.
+
+=== Storage Integration
+
+Storage is a critical concern for any production system. The Container Storage Interface (CSI) will serve as our integration point for persistent storage solutions. This allows o7d to provide consistent storage interfaces while enabling future extensibility for different backend implementations.
+
+=== Security & Access Control
+
+Security cannot be an afterthought. Role-Based Access Control (RBAC) will be configured by default, with sensible presets that balance security and usability. Pod Security Policies will enforce baseline security standards without being overly restrictive.
+
+== The Path Forward
+
+As we build out o7d, Kubernetes will serve as more than just container orchestration - it will be the foundation that other components build upon. Its API extensibility enables seamless integration of future o7d services while maintaining a consistent operational model.
+
+We must resist the temptation to over-customize. Each addition should be carefully considered against our core philosophy of providing what's essential for most cloud deployments. The goal is empowerment through thoughtful constraints rather than unlimited flexibility.
+
+== Open Questions
+
+Several important decisions remain:
+
+What is the right Kubernetes distribution to build upon? While vanilla Kubernetes provides maximum flexibility, distributions like k3s or rke2 offer compelling benefits for our use case.
+
+How do we handle the upgrade lifecycle? Kubernetes moves quickly, and we need a clear strategy for managing versions while maintaining stability for users.
+
+== References
+
+- Kubernetes Documentation: https://kubernetes.io/docs/
+- Container Runtime Interface: https://github.com/kubernetes/cri-api
+- Container Storage Interface: https://github.com/container-storage-interface/spec
+
+The success of o7d depends heavily on getting these foundational decisions right. Kubernetes provides an incredibly powerful base to build upon, but we must remain focused on our goal: simplifying cloud deployments for the 90% case.
