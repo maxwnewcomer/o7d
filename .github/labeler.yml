@@ -1,0 +1,7 @@
+rfds:
+  - changed-files:
+      - any-glob-to-any-file: rfds/*
+
+cli:
+  - changed-files:
+      - any-glob-to-any-file: cli/*
