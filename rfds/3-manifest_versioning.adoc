@@ -1,0 +1,257 @@
+:authors: Max Newcomer <@maxwnewcomer>
+:state: discussion
+:discussion: https://github.com/o7d/opencloud/discussions/manifest-versioning
+:labels: versioning, core
+
+= Manifest Versioning for o7d
+
+== Summary
+
+This Request for Discussion (RFD) proposes a versioning strategy for Kubernetes manifests within the o7d project. While the project is in its initial scaffolding and non-production-ready state, manifests will not be versioned or expected to maintain backward compatibility. However, as we progress beyond version 0.1.0, we will begin applying patches to manifests using `kustomize`, aiming for a stable and maintainable deployment process.
+
+== Background
+
+Opencloud (o7d) is an open-source initiative focused on simplifying cloud deployments using Kubernetes. In the early development stages, rapid changes and iterations are common, which can lead to significant alterations in the underlying infrastructure and manifests. This fluidity is acceptable during initial development but poses challenges as we move towards a production-ready state.
+
+Currently, any substantial changes in technology stacks or core decisions necessitate rebuilding clusters from scratch. This approach is inefficient and unsustainable for future development and user adoption.
+
+== Motivation
+
+To ensure the project's long-term success and reliability, we need to establish a versioning system for our Kubernetes manifests. The primary motivations include:
+
+* **Stability:** Providing a consistent and reliable deployment experience.
+* **Backward Compatibility:** Allowing users to upgrade without needing to rebuild clusters entirely.
+* **Traceability:** Keeping track of changes for debugging and auditing purposes.
+* **Collaboration:** Facilitating contributions from multiple developers without conflict.
+
+Adopting a structured versioning approach will help us manage changes effectively and enhance overall project maintainability.
+
+== Proposal
+
+We propose implementing a manifest versioning strategy as follows:
+
+1. **Pre-Version 0.1.0 Phase:**
+
+   * Manifests are not versioned.
+   * Breaking changes are acceptable.
+   * Clusters may need to be rebuilt due to significant changes.
+
+2. **Post-Version 0.1.0 Phase (Starting at Version 0.2.0):**
+
+   * **Versioning System:** Adopt semantic versioning for manifests.
+     ** **MAJOR** version increments for incompatible API changes.
+     ** **MINOR** version increments for functionality added in a backward-compatible manner.
+     ** **PATCH** version increments for backward-compatible bug fixes.
+   * **Use of `kustomize`:** Implement `kustomize` to manage and apply patches to manifests.
+   * **Documentation:**
+     ** Maintain comprehensive changelogs and migration guides.
+   * **Testing:**
+     ** Introduce automated testing for manifest changes to ensure reliability.
+
+== Example: Patching with `kustomize`
+
+To illustrate how we will use `kustomize` for patching manifests, consider the following example.
+
+**Base Deployment (`base/deployment.yaml`):**
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+        - name: myapp-container
+          image: myapp:1.0.0
+```
+
+**First Patch: Update Image Version (`patches/patch1.yaml`):**
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+spec:
+  template:
+    spec:
+      containers:
+        - name: myapp-container
+          image: myapp:1.1.0
+```
+
+**Second Patch: Increase Replicas (`patches/patch2.yaml`):**
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+spec:
+  replicas: 3
+```
+
+**`kustomization.yaml`:**
+
+```yaml
+resources:
+  - base/deployment.yaml
+
+patchesStrategicMerge:
+  - patches/patch1.yaml
+  - patches/patch2.yaml
+```
+
+By running `kustomize build`, we generate the final manifest where both patches are applied:
+
+* The image version is updated to `myapp:1.1.0`.
+* The number of replicas is increased to `3`.
+
+== Addressing Complexity in Patched Manifests
+
+As we accumulate patches over time, understanding the final state of the manifests can become challenging. To mitigate this issue, we propose the following strategies:
+
+* **Simplifying Initialization for New Projects:**
+
+  ** When new projects are initialized with the o7d package, they receive a base manifest that has all the patches already applied.
+  ** The patch history is maintained in the original o7d repository.
+  ** Users can pull down new patches as they become available, applying them to their base manifests.
+
+* **Controlled Patch Application:**
+
+  ** Users have control over which patches to apply, allowing them to opt-in to updates at their own pace.
+  ** This approach reduces the frequency of major version changes impacting users' builds.
+
+* **Use of `kustomize build`:**
+
+  ** Encourage the use of `kustomize build` to render the fully patched manifests.
+  ** Provide scripts or Make targets to simplify this process for developers.
+
+* **Visualization Tools:**
+
+  ** Utilize tools like `kubectl diff` or `kubeval` to compare and validate manifests.
+  ** Implement visualization tools that can display the effective configuration after patches.
+
+* **Documentation:**
+
+  ** Maintain clear documentation of the layering and patching strategy.
+  ** Provide examples and guides on how to interpret and troubleshoot the final manifests.
+
+* **Automated Testing:**
+
+  ** Implement tests that validate the final manifests after all patches are applied.
+  ** Use Continuous Integration to catch issues arising from complex patches.
+
+== Implementation Plan
+
+**Phase 1: Preparation (Version 0.1.x)**
+
+* **Audit Current Manifests:**
+
+  ** Review existing manifests for consistency and completeness.
+  ** Identify components that will require versioning.
+
+* **Set Up `kustomize` Base:**
+
+  ** Create a base directory structure for `kustomize`.
+  ** Organize manifests into bases and patches.
+
+**Phase 2: Initial Versioning (Version 0.2.0)**
+
+* **Apply Semantic Versioning:**
+
+  ** Tag the initial stable release of manifests as version 0.2.0.
+  ** Begin tracking changes according to semantic versioning principles.
+
+* **Integrate `kustomize` into CI/CD:**
+
+  ** Update pipelines to incorporate `kustomize` build and validation steps.
+  ** Ensure automated testing is in place for manifest changes.
+
+**Phase 3: Ongoing Maintenance**
+
+* **Changelog Management:**
+
+  ** Update changelogs with each release.
+  ** Document breaking changes and provide upgrade instructions.
+
+* **Community Engagement:**
+
+  ** Encourage community feedback on manifest changes.
+  ** Provide support for users upgrading between versions.
+
+== Alternatives Considered
+
+* **Helm Charts:**
+
+  ** **Pros:**
+     *** Templating capabilities.
+     *** Widespread adoption.
+  ** **Cons:**
+     *** Increased complexity.
+     *** Additional learning curve for contributors.
+  ** **Reason for Rejection:**
+     *** We prefer to keep dependencies minimal and use native Kubernetes tools.
+
+* **Customized Scripts:**
+
+  ** **Pros:**
+     *** Complete control over the deployment process.
+  ** **Cons:**
+     *** Higher maintenance burden.
+     *** Potential for inconsistency.
+  ** **Reason for Rejection:**
+     *** Scripts can become unmanageable at scale and are less accessible to new contributors.
+
+== Impact Analysis
+
+* **Development Workflow:**
+
+  ** Developers will need to follow versioning guidelines.
+  ** Additional steps in the development process for updating versions and changelogs.
+
+* **User Experience:**
+
+  ** Users will benefit from more predictable upgrades.
+  ** Potential learning curve in understanding `kustomize` overlays.
+
+* **Documentation:**
+
+  ** Increased documentation requirements for maintaining changelogs and migration guides.
+
+* **Tooling and Infrastructure:**
+
+  ** Updates to CI/CD pipelines.
+  ** Possible need for training or documentation on `kustomize` usage.
+
+== Open Questions
+
+* **Deprecation Policy:**
+
+  ** How long will deprecated manifests be supported?
+  ** What is the process for notifying users of deprecations?
+
+* **Version Alignment:**
+
+  ** Should manifest versions align with application versions?
+  ** How do we handle versioning for dependencies and third-party components?
+
+* **Testing Strategy:**
+
+  ** What level of testing is required for manifest changes?
+  ** How do we automate testing across different Kubernetes versions?
+
+* **Complexity Management:**
+
+  ** How frequently should we integrate patches back into the base?
+  ** Can we automate the consolidation of patches to simplify the manifest structure?
+
+== Conclusion
+
+Implementing a manifest versioning strategy is crucial for the maturation of the o7d project. By adopting semantic versioning and utilizing `kustomize`, we can provide a stable and reliable deployment process that benefits both developers and users. Additionally, by addressing the complexity of patched manifests simplifying the initialization of new projects, we can maintain clarity and ease of understanding in our deployment configurations.
