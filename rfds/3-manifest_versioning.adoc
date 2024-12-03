@@ -1,7 +1,8 @@
 :authors: Max Newcomer <@maxwnewcomer>
 :state: discussion
-:discussion: https://github.com/o7d/opencloud/discussions/manifest-versioning
+:discussion: https://github.com/maxwnewcomer/o7d/discussions/9
 :labels: versioning, core
+:source-highlighter: highlightjs
 
 = Manifest Versioning for o7d
 
@@ -54,7 +55,8 @@ To illustrate how we will use `kustomize` for patching manifests, consider the f
 
 **Base Deployment (`base/deployment.yaml`):**
 
-```yaml
+[source,yaml]
+----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -69,11 +71,12 @@ spec:
       containers:
         - name: myapp-container
           image: myapp:1.0.0
-```
+----
 
 **First Patch: Update Image Version (`patches/patch1.yaml`):**
 
-```yaml
+[source,yaml]
+----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -84,29 +87,31 @@ spec:
       containers:
         - name: myapp-container
           image: myapp:1.1.0
-```
+----
 
 **Second Patch: Increase Replicas (`patches/patch2.yaml`):**
 
-```yaml
+[source,yaml]
+----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: myapp
 spec:
   replicas: 3
-```
+----
 
 **`kustomization.yaml`:**
 
-```yaml
+[source,yaml]
+----
 resources:
   - base/deployment.yaml
 
 patchesStrategicMerge:
   - patches/patch1.yaml
   - patches/patch2.yaml
-```
+----
 
 By running `kustomize build`, we generate the final manifest where both patches are applied:
 
