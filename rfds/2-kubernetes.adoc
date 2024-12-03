@@ -1,6 +1,6 @@
 :authors: Max Newcomer <@maxwnewcomer>
 :state: discussion 
-:discussion: todo
+:discussion: https://github.com/maxwnewcomer/o7d/discussions/8
 :labels: infrastructure, core
 
 = Kubernetes
