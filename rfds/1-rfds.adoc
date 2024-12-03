@@ -1,7 +1,7 @@
 
 :authors: Max Newcomer <@maxwnewcomer>
 :state: discussion
-:discussion: todo
+:discussion: https://github.com/maxwnewcomer/o7d/discussions/7
 :labels: rfd, oss-core
 
 = Requests for Discussion (RFD) =
@@ -31,3 +31,7 @@ This project's *Requests for Discussions* will follow the format specified in ht
 
 6. **PR Naming Convention for new RFDs or modified RFDs**
    RFDs changes/initialization prs will follow the title format of `rfd/<number>: <title | summary of modification>`
+
+7. **Github Discussion Requirements**
+   RFDs will have a `:discussion:` metadata tag that links to a 1-1 discussion in the o7d main repository. This discussion will be labeled with the labels in the referenced RFD.
+   For example, this RFD is https://github.com/maxwnewcomer/o7d/discussions/7[discussed here], with the following labels - rfd, oss-core
